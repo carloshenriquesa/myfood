@@ -6,7 +6,6 @@ import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import Recipe from "@/components/Recipe";
 import IngredientList from "@/components/IngredientList";
-import { getRecipe } from "@/pages/api/ai";
 import Form from "@/components/Form";
 import { FormContext } from "@/context/FormContext";
 import axios from "axios";
