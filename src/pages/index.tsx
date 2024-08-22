@@ -1,41 +1,20 @@
 import { Inter } from "next/font/google";
 import Head from "next/head";
 import { Button } from "@/components/ui/button";
-import { useState, useContext } from "react";
-import Skeleton from 'react-loading-skeleton'
-import 'react-loading-skeleton/dist/skeleton.css'
-import Recipe from "@/components/Recipe";
+import { useContext } from "react";
 import IngredientList from "@/components/IngredientList";
 import Form from "@/components/Form";
 import { FormContext } from "@/context/FormContext";
-import axios from "axios";
+import { useRouter } from "next/router";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export interface RecipeProps {
-    title: string
-    ingredients: string[]
-    instructions: string[]
-    notes: string[]
-    suggestions: string[]
-}
-
 export default function Home() {
-    const { ingredientList, resetIngredientList } = useContext(FormContext);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [recipe, setRecipe] = useState<RecipeProps>();
+    const { ingredientList } = useContext(FormContext);
+    const router = useRouter();
 
-    async function handleGetRecipe() {
-        setIsLoading(true);
-        const response = await axios.post('/api/recipe', ingredientList);
-        const recipe = response.data as RecipeProps;
-        setRecipe(recipe);
-        setIsLoading(false);
-    }
-
-    function handleReset() {
-        resetIngredientList();
-        setRecipe(undefined);
+    function goToRecipe() {
+        router.push('/receita');
     }
 
     return (
@@ -50,18 +29,7 @@ export default function Home() {
 
             <IngredientList />
 
-            <Button className="mt-6" disabled={!!!ingredientList.length} onClick={handleGetRecipe}>Sugerir receita</Button>
-
-            {isLoading && 
-                <>
-                    <Skeleton height={30} className="mt-6 mb-4" />
-                    <Skeleton height={20} count={5} />
-                </>
-            }
-
-            {!isLoading && recipe &&
-                <Recipe recipe={recipe} handleGetRecipe={() => handleGetRecipe()} handleReset={handleReset} />
-            }
+            <Button className="mt-6" disabled={!!!ingredientList.length} onClick={goToRecipe}>Sugerir receita</Button>
         </main>
     );
 }
