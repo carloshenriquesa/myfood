@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from "react";
+import { useContext } from "react";
 import { FormContext } from "@/context/FormContext";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
@@ -8,6 +8,7 @@ import {
     FormField,
     FormItem,
     FormMessage,
+    FormLabel,
   } from "@/components/ui/form"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { toast } from 'react-toastify';
@@ -25,7 +26,7 @@ const formSchema = z.object({
         message: "Cadê a quantidade?",
     }),
     unity: z.string().min(1, {
-        message: "Cadê a unidade?",
+        message: "Cadê a medida?",
     }),
 }) satisfies z.ZodType<IngredientProps>;
 
@@ -42,13 +43,7 @@ export default function IngredientForm() {
             },
         }
     );
-    
-    async function handleSuggestUnity(data: IngredientProps) {
-        const response = await axios.post('/api/weight-measurements', data);
-        const { weightMeasurements } = response.data;
-        form.setValue('unity', weightMeasurements);
-    }
-    
+
     async function handleAddIngredient(data: IngredientProps) {
         const loading = toast.loading('Adicionando ingrediente...');
         await axios.post('/api/ingredient', data)
@@ -96,11 +91,10 @@ export default function IngredientForm() {
                     control={form.control}
                     name="ingredient"
                     render={({ field }) => (
-                        <FormItem className="flex w-full">
+                        <FormItem className="flex w-full flex-col">
+                            <FormLabel>Ingrediente</FormLabel>
                             <FormControl>
-                                <Input 
-                                    placeholder="Ingrediente" 
-                                    {...field} />
+                                <Input {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -111,7 +105,8 @@ export default function IngredientForm() {
                     control={form.control}
                     name="quantity"
                     render={({ field }) => (
-                        <FormItem className="flex w-full">
+                        <FormItem className="flex w-full flex-col">
+                            <FormLabel>Quantidade</FormLabel>
                             <FormControl>
                                 <Input
                                     placeholder="Quantidade"
@@ -126,11 +121,12 @@ export default function IngredientForm() {
                     control={form.control}
                     name="unity"
                     render={({ field }) => (
-                        <FormItem className="flex w-full">
+                        <FormItem className="flex w-full flex-col">
+                            <FormLabel>Medida</FormLabel>
                             <FormControl>
                                 <Select onValueChange={field.onChange}>
                                     <SelectTrigger>
-                                        <SelectValue placeholder="Unidade de medida" />
+                                        <SelectValue />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="unit">unidade</SelectItem>
@@ -145,7 +141,7 @@ export default function IngredientForm() {
                     )}
                 />
 
-                <Button type="submit">Adicionar</Button>
+                <Button type="submit" className="mt-[21px]">Adicionar</Button>
             </form>
         </Form>
     )

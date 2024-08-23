@@ -41,48 +41,56 @@ export default function Recipe() {
             )}
 
             {!isLoading && (
-                <>
-                    <div className="max-w-3xl mb-7">
-                        <h1 className="text-2xl font-extrabold">{recipe?.title}</h1>
-                        <h2 className="text-xl font-bold mt-5">Ingredientes</h2>
-                        <ul>
-                            {recipe?.ingredients.map((ingredient, index) => (
-                                <li key={index}>{ingredient}</li>
-                            ))}
-                        </ul>
-                        <h2 className="text-xl font-bold mt-5">Modo de preparo</h2>
-                        {recipe?.instructions.map((instruction, index) => (
-                            <p key={index}>{instruction}</p>
+                <div className="max-w-3xl">
+                    <h1 className="text-2xl font-extrabold">{recipe?.title}</h1>
+                    <a 
+                        className="flex mt-3 mb-3 text-sky-600 text-sm" 
+                        target="_blank" 
+                        href={`http://www.youtube.com/results?search_query=${recipe?.title}`}>
+                            Buscar por vídeos sobre a receita
+                    </a>
+                    <h2 className="text-xl font-bold mt-5">Ingredientes</h2>
+                    <ul>
+                        {recipe?.ingredients.map((ingredient, index) => (
+                            <li key={index}>{ingredient}</li>
                         ))}
-                        {recipe?.notes && recipe?.notes.length > 0 && (
-                            <>
-                                <h3 className="text-lg font-bold mt-5">Observações ❗</h3>
-                                {recipe.notes.map((note, index) => (
-                                    <p key={index}>{note}</p>
-                                ))}
-                            </>
-                        )}
-                        {recipe?.suggestions && recipe.suggestions.length > 0 && (
-                            <>
-                                <h3 className="text-lg font-bold mt-5">Sugestões</h3>
-                                {recipe.suggestions.map((suggestion, index) => (
-                                    <p key={index}>{suggestion}</p>
-                                ))}
-                            </>
-                        )}
-                        <a 
-                            className="mt-6 text-sky-600 flex" 
-                            target="_blank" 
-                            href={`http://www.youtube.com/results?search_query=${recipe?.title}`}>
-                                Buscar por vídeos sobre a receita
-                        </a>
-                    </div>
-                    <div className="flex items-center justify-center w-full gap-2 mt-6 fixed bottom-0 bg-white pt-4 pb-4 border-t border-gray-300">
-                        <Button onClick={handleGetRecipe}>Sugerir outra receita</Button>
-                        <Link href="/" className="ml-5">Alterar ingredientes</Link>
-                    </div>
-                </>
+                    </ul>
+                    <h2 className="text-xl font-bold mt-5">Modo de preparo</h2>
+                    {recipe?.instructions.map((instruction, index) => (
+                        <p key={index}>{instruction}</p>
+                    ))}
+                    {recipe?.notes && recipe?.notes.length > 0 && (
+                        <>
+                            <h3 className="text-lg font-bold mt-5">Observações ❗</h3>
+                            {recipe.notes.map((note, index) => (
+                                <p key={index}>{note}</p>
+                            ))}
+                        </>
+                    )}
+                    {recipe?.suggestions && recipe.suggestions.length > 0 && (
+                        <>
+                            <h3 className="text-lg font-bold mt-5">Sugestões</h3>
+                            {recipe.suggestions.map((suggestion, index) => (
+                                <p key={index}>{suggestion}</p>
+                            ))}
+                        </>
+                    )}
+                </div>
             )}
+                <div className="flex items-center justify-center w-full gap-2 mt-6 fixed bottom-0 bg-white pt-4 pb-4 border-t border-gray-300">
+                    {!isLoading &&
+                        <>
+                            <Button onClick={handleGetRecipe}>Sugerir outra receita</Button>
+                            <Link href="/" className="ml-5">Alterar ingredientes</Link>
+                        </>
+                    }
+                    {isLoading &&
+                        <>
+                            <Skeleton width={150} height={40} />
+                            <Skeleton width={150} height={40} />
+                        </> 
+                    }
+                </div>
         </main>
     )
 }
